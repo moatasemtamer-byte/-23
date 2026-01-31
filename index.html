@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="تطبيق مُولد أوردرات السندوتشات المصرية">
+    <meta name="theme-color" content="#667eea">
+    <title>الواحي معتصم - مُولد الأوردرات</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="banner">
+        <p>صلي علي النبي</p>
+        <p>معتصم بيحب ماما و بابا</p>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">
+            <div class="header-icon">♦</div>
+            <h1>مُولد الأوردرات</h1>
+        </div>
+        <div class="badge" id="totalBadge" style="display: none;">
+            <span id="totalCount">0</span>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <button class="tab active" data-tab="balady" onclick="switchTab('balady')">بلدي</button>
+        <button class="tab" data-tab="shami" onclick="switchTab('shami')">شامي</button>
+        <button class="tab" data-tab="appetizer" onclick="switchTab('appetizer')">مقبلات</button>
+        <button class="tab" data-tab="jar" onclick="switchTab('jar')">علب</button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="content">
+        <div id="balady" class="tab-content active">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+        <div id="shami" class="tab-content">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+        <div id="appetizer" class="tab-content">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+        <div id="jar" class="tab-content">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+    </div>
+
+    <!-- Floating Generate Button -->
+    <button class="floating-btn" id="generateBtn" onclick="generateOrder()">
+        نسخ الأوردر (<span id="floatingCount">0</span>)
+    </button>
+
+    <!-- Order Preview Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>طلبك</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="order-text" id="orderText">لا توجد عناصر</div>
+            
+            <div class="payment-section">
+                <h3 class="payment-title">طريقة الدفع:</h3>
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="instapay" checked onchange="updatePaymentPreview()">
+                        <span>دفع انستا باي</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="cash" onchange="updatePaymentPreview()">
+                        <span>الدفع كاش</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button class="copy-btn" onclick="copyOrder()">
+                نسخ الأوردر
+            </button>
+            <div class="success-msg" id="successMsg">تم النسخ بنجاح!</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
