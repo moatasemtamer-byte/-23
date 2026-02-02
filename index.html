@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="تطبيق مُولد أوردرات السندوتشات المصرية">
+    <meta name="theme-color" content="#667eea">
+    <title>الواحي معتصم - مُولد الأوردرات</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="banner">
+        <p>صلي علي النبي</p>
+        <p>معتصم بيحب ماما و بابا</p>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">
+            <div class="header-icon">♦</div>
+            <h1>مُولد الأوردرات</h1>
+        </div>
+        <div class="header-actions">
+            <button class="reset-btn" id="resetBtn" onclick="resetAllOrders()" style="display: none;" title="إعادة تعيين جميع الطلبات">
+                <span class="reset-icon">↺</span>
+            </button>
+            <button class="mode-toggle" id="modeToggle" onclick="toggleMode()">
+                <span class="mode-icon">👥</span>
+            </button>
+            <div class="badge" id="totalBadge" style="display: none;">
+                <span id="totalCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Persons Mode Section -->
+    <div class="persons-section" id="personsSection" style="display: none;">
+        <div class="persons-header">
+            <h3>اختر الشخص:</h3>
+            <div class="persons-header-actions">
+                <button class="finish-all-btn" onclick="finishAllOrders()">✓ إنهاء الطلبات</button>
+                <button class="manage-persons-btn" onclick="openManagePersons()">إدارة الأشخاص</button>
+            </div>
+        </div>
+        <div class="persons-list" id="personsList"></div>
+    </div>
+
+    <!-- Current Person Ordering Banner -->
+    <div class="ordering-banner" id="orderingBanner" style="display: none;">
+        <div class="ordering-info">
+            <span class="ordering-label">الطلب لـ:</span>
+            <span class="ordering-person" id="orderingPersonName"></span>
+        </div>
+        <div class="ordering-actions">
+            <button class="next-person-btn" onclick="nextPerson()">التالي ←</button>
+            <button class="finish-ordering-btn" onclick="finishOrdering()">إنهاء الطلبات</button>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs" id="tabsSection">
+        <button class="tab active" data-tab="balady" onclick="switchTab('balady')">بلدي</button>
+        <button class="tab" data-tab="shami" onclick="switchTab('shami')">شامي</button>
+        <button class="tab" data-tab="appetizer" onclick="switchTab('appetizer')">مقبلات</button>
+        <button class="tab" data-tab="jar" onclick="switchTab('jar')">علب</button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="content">
+        <div id="balady" class="tab-content active">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+        <div id="shami" class="tab-content">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+        <div id="appetizer" class="tab-content">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+        <div id="jar" class="tab-content">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+    </div>
+
+    <!-- Floating Generate Button -->
+    <button class="floating-btn" id="generateBtn" onclick="generateOrder()">
+        نسخ الأوردر (<span id="floatingCount">0</span>)
+    </button>
+
+    <!-- Order Preview Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>طلبك</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="order-text" id="orderText">لا توجد عناصر</div>
+            
+            <div class="payment-section">
+                <h3 class="payment-title">طريقة الدفع:</h3>
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="instapay" checked onchange="updatePaymentPreview()">
+                        <span>دفع انستا باي</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="cash" onchange="updatePaymentPreview()">
+                        <span>الدفع كاش</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button class="copy-btn" onclick="copyOrder()">
+                نسخ الأوردر
+            </button>
+            <div class="success-msg" id="successMsg">تم النسخ بنجاح!</div>
+        </div>
+    </div>
+
+    <!-- Manage Persons Modal -->
+    <div class="modal" id="managePersonsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إدارة الأشخاص</h2>
+                <button class="close-btn" onclick="closeManagePersons()">×</button>
+            </div>
+            
+            <div class="persons-manager">
+                <div class="add-person-section">
+                    <input type="text" id="newPersonInput" placeholder="اسم الشخص الجديد" class="person-input">
+                    <button class="add-person-btn" onclick="addNewPerson()">إضافة +</button>
+                </div>
+                
+                <div class="persons-list-manager" id="personsListManager"></div>
+            </div>
+            
+            <button class="copy-btn" onclick="closeManagePersons()">تم</button>
+        </div>
+    </div>
+
+    <!-- Person Order Review Modal -->
+    <div class="modal" id="reviewPersonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="reviewModalTitle">طلب الشخص</h2>
+                <button class="close-btn" onclick="closeReviewModal()">×</button>
+            </div>
+            <div class="order-text" id="reviewOrderText" style="min-height:60px;"></div>
+            <button class="copy-btn" onclick="copyReviewOrder()">نسخ الطلب</button>
+            <div class="success-msg" id="reviewSuccessMsg">تم النسخ بنجاح!</div>
+        </div>
+    </div>
+
+    <!-- Last Order Modal -->
+    <div class="modal" id="lastOrderModal">
+        <div class="modal-content confirmation-modal">
+            <div class="modal-header">
+                <h2>🔁 نفس الطلب السابق</h2>
+                <button class="close-btn" onclick="closeLastOrderModal()">×</button>
+            </div>
+            <div class="confirmation-message">
+                <p id="lastOrderPersonLabel" style="font-weight:bold; color:#667eea; font-size:18px;"></p>
+                <div id="lastOrderPreview" class="order-text" style="min-height:60px; margin:12px 0;"></div>
+                <p>هل تريد إضافة نفس الطلب السابق؟</p>
+            </div>
+            <div class="confirmation-actions">
+                <button class="cancel-btn" onclick="closeLastOrderModal()">إلغاء</button>
+                <button class="confirm-reset-btn" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);" onclick="confirmApplyLastOrder()">نعم، أضفه</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Confirmation Modal -->
+    <div class="modal" id="resetConfirmModal">
+        <div class="modal-content confirmation-modal">
+            <div class="modal-header">
+                <h2>⚠️ تأكيد إعادة التعيين</h2>
+                <button class="close-btn" onclick="closeResetConfirm()">×</button>
+            </div>
+            
+            <div class="confirmation-message">
+                <p>هل أنت متأكد من إعادة تعيين جميع الطلبات؟</p>
+                <p class="warning-text">سيتم حذف جميع الاختيارات لكل الأشخاص!</p>
+            </div>
+            
+            <div class="confirmation-actions">
+                <button class="cancel-btn" onclick="closeResetConfirm()">إلغاء</button>
+                <button class="confirm-reset-btn" onclick="confirmReset()">نعم، إعادة التعيين</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
